@@ -1,0 +1,114 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper, left=0.5in, right = 0.5in, top=1in, bottom=1in}
+\usepackage{graphicx} % support the \includegraphics command and options
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\usepackage{xcolor}
+\allsectionsfont{\rmfamily\bfseries\upshape\color{blue}} % (See the fntguide.pdf for font help)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% EQUATION EDITING
+\usepackage{amsmath, mathtools} % for mathmatical equation edits
+\everymath{\displaystyle}
+\newcommand{\numeq}{\stepcounter{equation} \tag{\theequation}}
+\newcommand{\rfrac}[2]{{}^{#1}\!/_{#2}}
+\newcommand{\erf}{\mathrm{erf}} % amsmath dosen't have the \erf built-in
+
+%%% END Article customizations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555
+
+\title{\rmfamily\bfseries\upshape 2D Gaussian derivatives}
+
+\author{Yandong Yin}
+\date{2020-07-15} % Activate to display a given date or no date (if empty), otherwise the current date is printed 
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\section{Construction of the expected $\mu$ at $\left[x, y\right]$}
+The normalized bivariate Gaussian $\mu = f\left(x, y \mid x_c, y_c, \sigma_x, \sigma_y, \rho\right) $ at position $\left[x, y\right]$ is:
+\begin{align*}
+\mu =  \frac{1}{2 \pi \sigma_x \sigma_y \sqrt{1-\rho^2}} \exp \left\{-\frac{1}{2\left(1-\rho^2\right)} \left[ \left(\frac{x - x_c}{\sigma_x}\right)^2 -2\rho\left(\frac{x-x_c}{\sigma_x}\right)\left(\frac{y-y_c}{\sigma_y}\right) + \left(\frac{y-y_c}{\sigma_y}\right)^2 \right]\right\}
+\end{align*}
+where $[x_c, y_c]$ is the position of the Gaussian center; $[\sigma_x, \sigma_y]$ is the Gaussian sigma in $x$-, and $y$-axis, respectively; and $\rho \in \left[0, 1 \right)$ is the correlation between $x$ and $y$.\\ 
+Define:
+\begin{align*}
+u\left(x\mid x_c, \sigma_x\right) = \frac{x-x_c}{\sigma_x}; \qquad v\left(y\mid y_c, \sigma_y\right) = \frac{y-y_c}{\sigma_y}
+\end{align*}
+\begin{align*}
+p\left(x, y\mid x_c, y_c, \sigma_x, \sigma_y, \rho\right) &= -\frac{1}{2\left(1-\rho^2\right)} \left[ \left(\frac{x - x_c}{\sigma_x}\right)^2 -2\rho\left(\frac{x-x_c}{\sigma_x}\right)\left(\frac{y-y_c}{\sigma_y}\right) + \left(\frac{y-y_c}{\sigma_y}\right)^2 \right] \\
+&=-\frac{1}{2\left(1-\rho^2\right)} \left(u^2 -2\rho uv+v^2 \right)
+\end{align*}
+\begin{align*}
+q\left(\sigma_x, \sigma_y, \rho\right) =\sigma_x^{-1}\sigma_y^{-1}\left(1-\rho^2\right)^{-1/2}
+\end{align*}
+And thus
+\begin{align*}
+\mu = \frac{1}{2\pi} \cdot q \cdot \exp\left(p\right)
+\end{align*}
+
+\section{Construction of the Jacobian at $\left[x, y\right]$}
+\begin{align*}
+u\left(x\mid x_c, \sigma_x\right) = \frac{x-x_c}{\sigma_x}; \qquad &\frac{\partial u}{\partial x_c} = -\frac{1}{\sigma_x}; \qquad \frac{\partial u}{\partial \sigma_x} = -\frac{x-x_c}{\sigma_x^2} = -\frac{u}{\sigma_x}\\ 
+v\left(y\mid y_c, \sigma_y\right) = \frac{y-y_c}{\sigma_y}; \qquad &\frac{\partial v}{\partial y_c} = -\frac{1}{\sigma_y}; \qquad \frac{\partial v}{\partial \sigma_y} = -\frac{y-y_c}{\sigma_y^2} = -\frac{v}{\sigma_y}
+\end{align*}
+and
+\begin{align*}
+\frac{\partial p}{\partial x_c} &= \frac{\partial p}{\partial u} \frac{\partial u}{\partial x_c} = -\frac{1}{2\left(1-\rho^2\right)} \left(2u -2\rho v\right) \left(-\frac{1}{\sigma_x}\right) =  \frac{1}{\sigma_x}\frac{u -\rho v}{1-\rho^2}\\
+\frac{\partial p}{\partial y_c} &= \frac{\partial p}{\partial v} \frac{\partial v}{\partial y_c} = -\frac{1}{2\left(1-\rho^2\right)} \left(2v -2\rho u\right) \left(-\frac{1}{\sigma_y}\right) = \frac{1}{\sigma_y}\frac{v -\rho u}{1-\rho^2} \\
+\frac{\partial p}{\partial \sigma_x} &= \frac{\partial p}{\partial u} \frac{\partial u}{\partial \sigma_x} = -\frac{1}{2\left(1-\rho^2\right)} \left(2u -2\rho v\right) \left(-\frac{u}{\sigma_x}\right) =  \frac{u}{\sigma_x}\frac{u -\rho v}{1-\rho^2}=  \frac{1}{\sigma_x}\frac{u^2 -\rho uv}{1-\rho^2}\\
+\frac{\partial p}{\partial \sigma_y} &= \frac{\partial p}{\partial v} \frac{\partial v}{\partial \sigma_y} = -\frac{1}{2\left(1-\rho^2\right)} \left(2v -2\rho u\right) \left(-\frac{v}{\sigma_y}\right) =  \frac{v}{\sigma_y}\frac{v -\rho u}{1-\rho^2}=  \frac{1}{\sigma_y}\frac{v^2 -\rho uv}{1-\rho^2}\\
+\frac{\partial p}{\partial \rho} &= -\frac{1}{2}\left[-\frac{-2\rho}{\left(1-\rho^2\right)^2}\left(u^2-2\rho uv + v^2\right) + \frac{1}{1-\rho^2}\left(-2uv\right)\right]\\
+&= \frac{1}{1-\rho^2}\left[-\frac{2\rho}{2\left(1-\rho^2\right)}\left(u^2-2\rho uv + v^2\right) + uv\right] = \frac{2\rho p + uv}{1-\rho^2}
+\end{align*}
+and
+\begin{align*}
+\frac{\partial q}{\partial \sigma_x} = -\frac{1}{\sigma_x}q; \qquad \frac{\partial q}{\partial \sigma_y} = -\frac{1}{\sigma_y}q; \qquad \frac{\partial q}{\partial \rho} = -\frac{-2\rho}{2\left(1-\rho^2\right)}q = \frac{\rho}{1-\rho^2}q\\
+\end{align*}
+Thus the Jocobian is:
+\begin{align*}
+\frac{\partial \mu}{\partial x_c} &= \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{\partial p}{\partial x_c} = \mu \frac{1}{\sigma_x}\frac{u -\rho v}{1-\rho^2}\\
+\frac{\partial \mu}{\partial y_c} &= \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{\partial p}{\partial y_c} = \mu \frac{1}{\sigma_y}\frac{v -\rho u}{1-\rho^2} \\
+\frac{\partial \mu}{\partial \sigma_x} &= \frac{1}{2\pi} \cdot \frac{\partial q}{\partial \sigma_x} \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{\partial p}{\partial \sigma_x}\\
+&=-\frac{1}{\sigma_x} \frac{1}{2\pi}\cdot q \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{1}{\sigma_x}\frac{u^2 -\rho uv}{1-\rho^2}\\
+&=\mu\frac{1}{\sigma_x}\left(\frac{u^2-\rho uv}{1-\rho^2} - 1\right)\\
+\frac{\partial \mu}{\partial \sigma_y} &= \frac{1}{2\pi} \cdot \frac{\partial q}{\partial \sigma_y} \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{\partial p}{\partial \sigma_y}\\
+&=-\frac{1}{\sigma_y} \frac{1}{2\pi}\cdot q \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{1}{\sigma_y}\frac{v^2 -\rho uv}{1-\rho^2}\\
+&=\mu\frac{1}{\sigma_y}\left(\frac{v^2-\rho uv}{1-\rho^2} - 1\right)\\
+\frac{\partial \mu}{\partial \rho} &= \frac{1}{2\pi} \cdot \frac{\partial q}{\partial \rho} \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{\partial p}{\partial \rho}\\
+&=\frac{\rho}{1 - \rho^2} \frac{1}{2\pi}\cdot q \cdot \exp\left(p\right) + \frac{1}{2\pi} \cdot q\cdot \exp\left(p\right) \cdot \frac{2\rho p + uv}{1-\rho^2}\\
+&=\mu\left(\frac{2\rho p + uv + \rho}{1-\rho^2}\right)
+\end{align*}
+\end{document}
+
+

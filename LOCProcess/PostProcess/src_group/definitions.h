@@ -1,0 +1,15 @@
+#pragma once
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
+
+    #define NDIM 3
+    #ifndef max
+        #define max(a,b) (((a) > (b)) ? (a) : (b))
+    #endif
+
+    #ifndef min
+        #define min(a,b) (((a) < (b)) ? (a) : (b))
+    #endif
+
+#endif
+
